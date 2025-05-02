@@ -1,6 +1,6 @@
-import { ScrapedData } from "../entities/ScrapedData";
+import { FlightSearchParams } from '../entities/FlightSearchParams';
+import { ScrapedData } from '../entities/ScrapedData';
 
 export interface IScraper {
-    scrap(url: string): Promise<ScrapedData>;
-  }
-  
+  scrap(params: FlightSearchParams): Promise<ScrapedData>;
+}

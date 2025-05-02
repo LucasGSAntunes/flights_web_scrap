@@ -9,12 +9,8 @@ const scraper = new TurkishAirlinesScraper();
 const useCase = new ScrapeUseCase(scraper);
 const controller = new ScrapeController(useCase);
 
-router.get('/', async (req, res) => {
-	try {
-		await controller.handle(req, res);
-	} catch (error) {
-		res.status(500).send({ error: 'Internal Server Error' });
-	}
+router.post('/', async (req, res) => {
+	await controller.handle(req, res);
 });
 
 export default router;

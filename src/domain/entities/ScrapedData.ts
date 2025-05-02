@@ -1,8 +1,11 @@
+import { FlightTextParser } from '../helpers/FlightTextParser';
+
 export interface ScrapedData {
-  source: string,
+  source: string;
   data: {
-    id: string,
-    testId: string,
-    fullText: string,
-  }[],
+    id: string;
+    testId: string;
+    fullText: string;
+    parsed?: FlightTextParser;
+  }[];
 }
