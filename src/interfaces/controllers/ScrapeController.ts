@@ -5,13 +5,13 @@ export class ScrapeController {
   constructor(private scrapeUseCase: ScrapeUseCase) {}
 
   async handle(req: Request, res: Response) {
-    const { url } = req.body;
-    if (!url || typeof url !== 'string') {
+    const body = req.body;
+    if (!body || typeof body.url !== 'string') {
       return res.status(400).json({ error: 'Missing or invalid url' });
     }
 
     try {
-      const result = await this.scrapeUseCase.execute(url);
+      const result = await this.scrapeUseCase.execute(req.body);
       res.json(result);
     } catch (err) {
       res.status(500).json({ 
