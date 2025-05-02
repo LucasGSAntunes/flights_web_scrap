@@ -1,0 +1,142 @@
+openapi: 3.0.0
+info:
+  title: API de Scraping – Turkish Airlines
+  version: 1.0.0
+  description: Documentação do endpoint de scraping via Clean Architecture
+servers:
+  - url: http://localhost:3000/api
+
+paths:
+  /scrape:
+    post:
+      tags:
+        - Scrape
+      summary: Executa o scraping de voos com parâmetros dinâmicos
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FlightSearchParams'
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ParsedFlight'
+        '400':
+          description: Parâmetros inválidos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    FlightSearchParams:
+      type: object
+      properties:
+        url:
+          type: string
+          example: "https://www.turkishairlines.com/"
+        from:
+          type: string
+          example: "São Paulo"
+        to:
+          type: string
+          example: "Dubai"
+        departureDate:
+          type: string
+          format: date
+          example: "2025-08-16"
+        returnDate:
+          type: string
+          format: date
+          example: "2025-11-20"
+        adults:
+          type: integer
+          example: 1
+        children:
+          type: integer
+          example: 0
+        infants:
+          type: integer
+          example: 1
+        students:
+          type: integer
+          example: 0
+        isRoundTrip:
+          type: boolean
+          example: false
+        isMultiCity:
+          type: boolean
+          example: false
+        segments:
+          type: array
+          items:
+            type: object
+            properties:
+              from:
+                type: string
+                example: "dubai"
+              to:
+                type: string
+                example: "qatar"
+              date:
+                type: string
+                format: date
+                example: "2025-05-23"
+      required:
+        - url
+        - from
+        - to
+        - departureDate
+        - adults
+        - children
+        - infants
+        - students
+        - isRoundTrip
+        - isMultiCity
+        - segments
+
+    ParsedFlight:
+      type: object
+      properties:
+        from:
+          type: string
+        to:
+          type: string
+        departureTime:
+          type: string
+        arrivalTime:
+          type: string
+        duration:
+          type: string
+        aircraft:
+          type: string
+        prices:
+          type: object
+          properties:
+            economy:
+              type: string
+            business:
+              type: string
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Internal Server Error"

@@ -1,0 +1,29 @@
+services:
+  app-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: flights_web_scrap-dev
+    environment:
+      NODE_ENV: development
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./:/usr/src/app
+      - /usr/src/app/node_modules
+    command: >
+      sh -c "npm install &&
+             npx nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts"
+
+  app-test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: test
+    container_name: flights_web_scrap-test
+    environment:
+      NODE_ENV: test
+      CI: "true"
+      
+    depends_on:
+      - app-dev

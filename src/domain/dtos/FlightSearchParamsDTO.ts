@@ -3,19 +3,7 @@ import { FlightSearchParams } from '../entities/FlightSearchParams';
 export class FlightSearchParamsDTO {
   static validate(data: any): FlightSearchParams {
     if (data.isMultiCity) {
-      if (!Array.isArray(data.segments) || data.segments.length < 2 || data.segments.length > 10) {
-        throw new Error('Multi-city requires 2 to 10 segments.');
-      }
-
-      for (let i = 0; i < data.segments.length; i++) {
-        const segment = data.segments[i];
-        if (!segment.from || !segment.to || !segment.date) {
-          throw new Error(`Missing required field in segment ${i + 1}`);
-        }
-        if (!/^\d{4}-\d{2}-\d{2}$/.test(segment.date)) {
-          throw new Error(`Invalid date format in segment ${i + 1}. Use YYYY-MM-DD`);
-        }
-      }
+      throw new Error('Multi-city searches are not supported yet.');
     } else {
       const requiredFields = ['from', 'to', 'departureDate', 'adults'];
       for (const field of requiredFields) {

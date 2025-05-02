@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { ScrapeUseCase } from '../../app/usecases/scrape/ScrapeUseCase';
 
 export class ScrapeController {
-  constructor(private scrapeUseCase: ScrapeUseCase) {}
+  constructor(public scrapeUseCase: ScrapeUseCase) {}
 
   async handle(req: Request, res: Response) {
     const body = req.body;

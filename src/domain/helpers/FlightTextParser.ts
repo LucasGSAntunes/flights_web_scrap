@@ -4,6 +4,20 @@ import { ParsedFlight } from '../entities/ParsedFlight';
 export class FlightTextParser {
   static parse(text: string): ParsedFlight {
     const lines = text.split('\n');
+    if (lines.length < 7) {
+      return {
+        from: '',
+        to: '',
+        departureTime: '',
+        arrivalTime: '',
+        duration: '',
+        aircraft: '',
+        prices: {
+          economy: '',
+          business: ''
+        }
+      };
+    }
 
     const getIndex = (label: string) => lines.findIndex((l) => l.toLowerCase().includes(label));
 
@@ -20,12 +34,12 @@ export class FlightTextParser {
 
 
     const extractPrices = (input: string): { economy: string; business: string } => {
-      const economyMatch = input.match(/ECONOMY[\s\S]*?BRL\s*([\d,.]+)\s*(\.\d+)/i);
-      const businessMatch = input.match(/BUSINESS[\s\S]*?BRL\s*([\d,.]+)\s*(\.\d+)/i);
+      const economyMatch = input.match(/ECONOMY[\s\S]*?BRL\s*([\d,.]+)(?:\s*\.([\d]+))?/i);
+      const businessMatch = input.match(/BUSINESS[\s\S]*?BRL\s*([\d,.]+)(?:\s*\.([\d]+))?/i);
 
       return {
-        economy: economyMatch ? economyMatch[1] : '',
-        business: businessMatch ? businessMatch[1] : '',
+        economy: economyMatch && economyMatch[1] ? `${economyMatch[1]}${economyMatch[2] ? '.' + economyMatch[2] : ''}` : '',
+        business: businessMatch && businessMatch[1] ? `${businessMatch[1]}${businessMatch[2] ? '.' + businessMatch[2] : ''}` : '',
       };
     };
 
